@@ -12,7 +12,7 @@ class UserModel {
 			[id]
 		);
 
-		return toCamelCase(users)[0];
+		return oCamelCase(users)[0];
 	}
 
 	static async find() {
