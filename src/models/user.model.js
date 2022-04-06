@@ -2,6 +2,15 @@ const pool = require('../pool');
 const toCamelCase = require('../utils/toCamelCase');
 
 class UserModel {
+	static async count() {
+		const { rows } = await pool.query(`
+			SELECT COUNT(*)
+			FROM users
+		`);
+
+		return rows[0].count;
+	}
+
 	static async delete(id) {
 		const { rows: users } = await pool.query(
 			`
@@ -12,7 +21,7 @@ class UserModel {
 			[id]
 		);
 
-		return oCamelCase(users)[0];
+		return toCamelCase(users)[0];
 	}
 
 	static async find() {
