@@ -2,7 +2,18 @@ const pool = require('../pool');
 const toCamelCase = require('../utils/toCamelCase');
 
 class UserModel {
-	static async delete() {}
+	static async delete(id) {
+		const { rows: users } = await pool.query(
+			`
+				DELETE FROM users
+				WHERE id = $1
+				RETURNING *;
+			`,
+			[id]
+		);
+
+		return toCamelCase(users)[0];
+	}
 
 	static async find() {
 		const { rows: users } = await pool.query(`
@@ -18,7 +29,7 @@ class UserModel {
 			`
 				SELECT * 
 				FROM users
-				WHERE id = $1
+				WHERE id = $1;
 			`,
 			[id]
 		);
@@ -26,9 +37,32 @@ class UserModel {
 		return toCamelCase(users)[0];
 	}
 
-	static async insert() {}
+	static async insert(username, bio) {
+		const { rows: users } = await pool.query(
+			`
+				INSERT INTO users (username, bio)
+				VALUES($1, $2)
+				RETURNING *;
+			`,
+			[username, bio]
+		);
 
-	static async update() {}
+		return toCamelCase(users)[0];
+	}
+
+	static async update(id, username, bio) {
+		const { rows: users } = await pool.query(
+			`
+				UPDATE users
+				SET username = $1, bio = $2
+				WHERE id = $3
+				RETURNING *;
+			`,
+			[username, bio, id]
+		);
+
+		return toCamelCase(users)[0];
+	}
 }
 
 module.exports = UserModel;
