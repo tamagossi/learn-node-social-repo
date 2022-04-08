@@ -18,16 +18,8 @@ beforeAll(async () => {
 		user: 'tamagossi',
 	});
 
-	await pool.query(`
-		CREATE ROLE ${roleName}
-		WITH LOGIN PASSWORD '${roleName}';
-	`);
-
-	await pool.query(`
-		CREATE SCHEMA ${roleName}
-		AUTHORIZATION ${rolename};
-	`);
-
+	await pool.query(format('CREATE ROLE %I WITH LOGIN PASSWORD %L', roleName, roleName));
+	await pool.query(format('CREATE SCHEMA %I AUTHORIZATION %I', roleName, roleName));
 	await pool.close();
 
 	await migrate({
