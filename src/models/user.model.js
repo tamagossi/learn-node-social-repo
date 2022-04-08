@@ -8,7 +8,7 @@ class UserModel {
 			FROM users
 		`);
 
-		return rows[0].count;
+		return parseInt(rows[0].count);
 	}
 
 	static async delete(id) {
